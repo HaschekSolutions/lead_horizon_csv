@@ -1,6 +1,7 @@
 # Lead Horizon CSV Generator
 
-Dieses Script erzeugt eine CSV Datei für jede Klasse zum Upload in die Lead Horizon Covidtestungsplattform
+Dieses Script erzeugt eine CSV Datei für jede Klasse zum Upload in die Lead Horizon Covidtestungsplattform.
+Voraussetzung ist, dass die Daten im Sokrates halbwegs korrekt sind und alle SchülerInnen dort eine Schülerkennzahl eingetragen haben.
 
 ## Schritt 1: Export aus Sokrates
 
@@ -43,8 +44,8 @@ Die erzeugte Datei `email-employeeid.csv` auch in den selben Ordne wie das php s
 
 ## Schritt 2: Script laufen lassen
 
-Windows: C:\pfad\zur\php.exe convert.php
+**Windows:** C:\pfad\zur\php.exe convert.php
 
-Linux: php convert.php
+**Linux:** php convert.php
 
 Danach wird im `output` Ordner eine CSV Datei für jede Klasse erstellt, die direkt auf Lead Horizon importiert werden kann
