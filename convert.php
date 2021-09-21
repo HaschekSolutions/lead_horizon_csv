@@ -39,28 +39,31 @@ $outheader = [
 
 $datennachklasse = [];
 $uniquenames = [];
+error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
 define('DS', DIRECTORY_SEPARATOR);
 define('ROOT', dirname(__FILE__));
+
+if(!file_exists(ROOT.DS.$in)) exit("[ERR] Datei ".ROOT.DS.$in." nicht gefunden :(");
 $lines = file(ROOT.DS.$in);
 
 foreach ($lines as $index => $line) {
     if ($index == 0) continue;
     $a = explode(";", trim($line));
-    $klasse = $csv_index_klasse;
-    $kennzahl = $csv_index_kennzahl;
-    $nachname = $csv_index_nachname;
-    $vorname = $csv_index_vorname;
-    $sozvers = $csv_index_sozvers;
-    $geschl = $csv_index_geschl;
-    $geburt = $csv_index_geburt;
-    $plz = $csv_index_plz;
-    $ort = $csv_index_ort;
-    $strasse = $csv_index_strasse;
-    $hausnummer = $csv_index_hausnummer;
-    $email = findEmail($kennzahl)?:$csv_index_email;
-    $tel = $csv_index_tel;
+    $klasse = $a[$csv_index_klasse];
+    $kennzahl = $a[$csv_index_kennzahl];
+    $nachname = $a[$csv_index_nachname];
+    $vorname = $a[$csv_index_vorname];
+    $sozvers = $a[$csv_index_sozvers];
+    $geschl = $a[$csv_index_geschl];
+    $geburt = $a[$csv_index_geburt];
+    $plz = $a[$csv_index_plz];
+    $ort = $a[$csv_index_ort];
+    $strasse = $a[$csv_index_strasse];
+    $hausnummer = $a[$csv_index_hausnummer];
+    $email = findEmail($kennzahl)?:$a[$csv_index_email];
+    $tel = $a[$csv_index_tel];
 
-    if(!$kennzahl) exit("$vorname $nachname ($klasse) hat keine kennzahl");
+    if(!$kennzahl) exit("$vorname $nachname ($klasse) hat keine kennzahl, so kann ich nicht arbeiten ;)");
 
     if($uniquenames[$kennzahl])
         continue;
@@ -86,8 +89,9 @@ foreach ($lines as $index => $line) {
     }
     else
     {
-        echo "[i] Keine Tel: $nachname $vorname ($klasse)\n";
         $tel = '00430000'.rand(111111,999999);
+        echo "[i] Keine Tel in Stammdaten: $nachname $vorname ($klasse)\tDurch Zufallszahlen ersetzt\n";
+
     }
 
     if(strlen($tel)>15) substr($tel,0,15);
@@ -119,7 +123,8 @@ ksort($datennachklasse);
 foreach ($datennachklasse as $klasse => $daten) {
     if(!is_dir(ROOT.DS.'output'))
         mkdir(ROOT.DS.'output');
-    $fp = fopen(ROOT."output".DS."$klasse.csv", 'w');
+    $fp = fopen(ROOT.DS."output".DS."$klasse.csv", 'w');
+    if(!$fp) exit("[ERR] Kann nicht in den Ordner ".ROOT.DS.'output schreiben :(');
 
     //zunächst den header schreiben
     fwrite($fp, implode(';', $outheader) . "\n");
